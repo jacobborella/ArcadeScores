@@ -1,6 +1,7 @@
 import React from 'react';
 import ShowScores from './src/screens/ShowScores';
 import SelectGame from './src/screens/SelectGame';
+import AddGame from './src/screens/AddGame';
 import { Game } from './src/components/atoms/Game';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -14,6 +15,10 @@ const App = () => {
         <Stack.Screen
           name="SelectGame"
           component={SelectGame}
+        />
+        <Stack.Screen
+          name="AddGame"
+          component={AddGame}
         />
         <Stack.Screen 
           name="ShowScores"

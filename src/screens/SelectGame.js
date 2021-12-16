@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import GamesView from '../components/organisms/GamesView';
 import { Game } from '../components/atoms/Game';
-import { StyleSheet, View, Image, TouchableOpacity, Alert, SafeAreaView } from "react-native";
+import { StyleSheet, View, Image, TouchableOpacity, SafeAreaView } from "react-native";
 
 const SelectGame = ({ navigation }) => {
     const [games, setGames] = useState([
@@ -25,7 +25,7 @@ const SelectGame = ({ navigation }) => {
         <SafeAreaView>
             <GamesView navigation={navigation} data={(navigation, games)}/>
             <View style={styles.MainContainer}>
-                <TouchableOpacity activeOpacity={0.5} onPress={this.SampleFunction} style={styles.TouchableOpacityStyle} >
+                <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate('AddGame')} style={styles.TouchableOpacityStyle} >
                     <Image source={require('../assets/Floating_Button.png')} 
                         style={styles.FloatingButtonStyle} />
                 </TouchableOpacity>
@@ -61,10 +61,5 @@ const styles = StyleSheet.create({
       height: 50,
     }
   });
-SampleFunction=()=>{
- 
-      Alert.alert("Floating Button Clicked");
- 
-  }
 
 export default SelectGame;
