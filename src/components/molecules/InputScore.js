@@ -8,8 +8,8 @@ const InputScore = (props) => {
   const [level, setLevel] = useState('');
   return (
     <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
-        <TextInput style={styles.score} placeholder="Score" value={score} onChangeText={setScore}/>
-        <TextInput style={styles.level} placeholder="Level" value={level} onChangeText={setLevel}/>
+        <TextInput style={styles.score} placeholder="Score" value={score} onChangeText={setScore} keyboardType="numeric"/>
+        <TextInput style={styles.level} placeholder="Level" value={level} onChangeText={setLevel} keyboardType="numeric"/>
         <Button title="Add score" onPress={() => {
                 s = new Score();
                 s.date=new Date();
