@@ -1,20 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
+import GamesView from '../components/organisms/GamesView';
 import { Game } from '../components/atoms/Game';
 import { Text, SafeAreaView, Button } from "react-native";
 
 const SelectGame = ({ navigation }) => {
+    const [games, setGames] = useState([
+        new Game("1942", "MiSTer"),
+        new Game("1942", "Nintendo Switch")
+    ]);
     return (
         <SafeAreaView>
-            <Text>SelectGame screen</Text>
-            <Button
-              title="Go to ShowScores"
-              onPress={() =>
-                navigation.navigate('ShowScores', { game: new Game("1942") })
-              }
-    />
+            <GamesView navigation={navigation} data={(navigation, games)}/>
         </SafeAreaView>
       );
 }
-
 
 export default SelectGame;
