@@ -11,8 +11,16 @@ const GamesProvider = ({ children }) => {
   const [games, setGames] = useState([]);
 
   const createGame = (gameName, gameVariant) => {
-    games.push(new Game(gameName, gameVariant));
-    setGames([...games])
+    const projectRealm = realmRef.current;
+    projectRealm.write(() => {
+      projectRealm.create(
+        "Game",
+        {
+          name: gameName,
+          variant: gameVariant,
+        }
+      );
+    });
   }
 
   const blocker = "foo";//ensure initialization only runs once
@@ -23,9 +31,13 @@ const GamesProvider = ({ children }) => {
     };
     Realm.open(config).then((projectRealm) => {
       realmRef.current = projectRealm;
-      let foundGames = projectRealm.objects("Game").sorted("name");
-      console.log("here");
-      setGames([...foundGames]);
+
+      const syncGames = projectRealm.objects("Game");
+      let sortedGames = syncGames.sorted("name");
+      setGames([...sortedGames]);
+      sortedGames.addListener(() => {
+        setGames([...sortedGames]);
+      });
     });
     return () => {
       // cleanup function
