@@ -5,4 +5,12 @@ export class Game {
         this.name = name;
         this.variant = variant;
     }
+    static schema = {
+        name: "Game",
+        properties: {
+          name: "string",
+          variant: "string",
+        },
+      };
+    
 }

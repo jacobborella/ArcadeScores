@@ -4,11 +4,10 @@ import ScoresView from "../components/organisms/ScoresView";
 import InputScore from "../components/molecules/InputScore";
 
 const ShowScores = ({ route, navigation }) => {
-    const { game } = route.params;
+    //const { game } = route.params;
     const [scores, setScores] = useState([]);
     return (
         <SafeAreaView>
-            <Text style={styles.game}>{game.name} ({game.variant})</Text>
             <InputScore title="Add score" onScoreAdded={(score) => {
                 setScores(scores => [score,...scores] );
             }}/>
@@ -24,5 +23,6 @@ const styles = StyleSheet.create({
     }
 });
 
+//<Text style={styles.game}>{game.name} ({game.variant})</Text>
 
 export default ShowScores;
