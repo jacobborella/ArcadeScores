@@ -21,10 +21,7 @@ const GamesProvider = ({ children }) => {
         }
       );
     });
-  }
-
-  const blocker = "foo";//ensure initialization only runs once
-  
+  } 
   useEffect(() => {
     const config = {
       schema: [Game.schema],
@@ -48,7 +45,7 @@ const GamesProvider = ({ children }) => {
         setGames([]);
       }
     };  
-  }, [blocker]);
+  }, []);
 
   // Render the children within the TaskContext's provider. The value contains
   // everything that should be made available to descendants that use the
