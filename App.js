@@ -24,8 +24,7 @@ const App = () => {
           />
           <Stack.Screen 
             name="ShowScores"
-            component={ShowScores}
-            options={{game: new Game("1942")}} />
+            component={ShowScores}/>
         </Stack.Navigator>
       </NavigationContainer>
     </GamesProvider>

@@ -2,32 +2,27 @@ import React, { useState, useEffect } from "react";
 import { Text, SafeAreaView, StyleSheet } from "react-native";
 import ScoresView from "../components/organisms/ScoresView";
 import InputScore from "../components/molecules/InputScore";
+import { useGames } from "../provider/GamesProvider";
 
 const ShowScores = ({ route, navigation }) => {
     const { game } = route.params;
-    const [scores, setScores] = useState([]);
+    const {scores, findScores, addScore} = useGames();
     useEffect(() => {
         navigation.setOptions({
           title: "Scores for " + game.name,
         });
+        findScores(game._id);
       }, []);
+
     return (
         <SafeAreaView>
             <InputScore title="Add score" onScoreAdded={(score) => {
-                setScores(scores => [score,...scores] );
+                addScore(game._id, score.level, score.score);
             }}/>
             <ScoresView data={scores}/>
         </SafeAreaView>
       );
 }
 
-const styles = StyleSheet.create({
-    game: {
-      fontSize: 26,
-      fontWeight: "bold"
-    }
-});
-
-//<Text style={styles.game}>{game.name} ({game.variant})</Text>
 
 export default ShowScores;

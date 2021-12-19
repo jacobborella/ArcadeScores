@@ -1,6 +1,8 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
 import Realm from "realm";
 import { Game } from "../components/atoms/Game";
+import { ObjectId } from "bson";
+import { Score } from "../components/atoms/Score";
 
 const GamesContext = React.createContext(null);
 
@@ -10,12 +12,42 @@ const GamesProvider = ({ children }) => {
 
   const [games, setGames] = useState([]);
 
+  const [scores, setScores] = useState([]);
+
+  const findScores = (gameId) => {
+    setScores(null)
+    const projectRealm = realmRef.current;
+    const syncScores = projectRealm.objects("Score").filtered("game_id == $0 ", gameId);
+    const sortedScores = syncScores.sorted([["date", true]]);
+    setScores(sortedScores);
+    sortedScores.addListener(() => {
+      setScores([...sortedScores])
+    });
+  }
+
+  const addScore = (gameId, level, score) => {
+    const projectRealm = realmRef.current;
+    let s;
+    projectRealm.write(() => {
+      s = projectRealm.create(
+        "Score",
+        {
+          game_id: gameId,
+          date: new Date(),
+          level: level,
+          score: score,
+        }
+      );
+    });
+  }
+
   const createGame = (gameName, gameVariant) => {
     const projectRealm = realmRef.current;
     projectRealm.write(() => {
       projectRealm.create(
         "Game",
         {
+          _id: new ObjectId(),
           name: gameName,
           variant: gameVariant,
         }
@@ -24,7 +56,7 @@ const GamesProvider = ({ children }) => {
   } 
   useEffect(() => {
     const config = {
-      schema: [Game.schema],
+      schema: [Game.schema, Score.schema],
     };
     Realm.open(config).then((projectRealm) => {
       realmRef.current = projectRealm;
@@ -55,6 +87,9 @@ const GamesProvider = ({ children }) => {
       value={{
         games,
         createGame,
+        scores,
+        findScores,
+        addScore,
       }}
     >
       {children}
