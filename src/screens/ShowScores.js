@@ -3,6 +3,11 @@ import { Text, SafeAreaView, StyleSheet } from "react-native";
 import ScoresView from "../components/organisms/ScoresView";
 import InputScore from "../components/molecules/InputScore";
 import { useGames } from "../provider/GamesProvider";
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
 
 const ShowScores = ({ route, navigation }) => {
     const { game } = route.params;
