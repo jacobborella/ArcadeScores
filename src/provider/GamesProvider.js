@@ -3,6 +3,7 @@ import Realm from "realm";
 import { Game } from "../components/atoms/Game";
 import { ObjectId } from "bson";
 import { Score } from "../components/atoms/Score";
+import app from "../realmApp";
 
 const GamesContext = React.createContext(null);
 
@@ -32,6 +33,7 @@ const GamesProvider = ({ children }) => {
       s = projectRealm.create(
         "Score",
         {
+          _id: new ObjectId(),
           game_id: gameId,
           date: new Date(),
           level: level,
@@ -53,12 +55,33 @@ const GamesProvider = ({ children }) => {
         }
       );
     });
-  } 
-  useEffect(() => {
-    const config = {
-      schema: [Game.schema, Score.schema],
+  }
+  async function loginUser(username, password) {
+    await app.logIn(Realm.Credentials.emailPassword(username, password));
+  }
+  async function logoutUser() {
+    await app.currentUser.logOut();
+  }
+  function getConfig(user) {
+    return {
+        schema: [Game.schema, Score.schema],
+        schemaVersion: 1,
+        sync: {
+          user,
+          partitionValue: `user=${user.id}`,
+        },
     };
-    Realm.open(config).then((projectRealm) => {
+  }
+  async function getRealm() {
+    console.log("inside getRealm")
+    if(!app.currentUser) {
+       throw new Error("Did you get to this screen without logging in?")
+    }
+    return new Realm(getConfig(app.currentUser))
+  }
+  const loadGames = () => {
+    console.log("Load GamesProvider")
+    getRealm().then((projectRealm) => {
       realmRef.current = projectRealm;
 
       const syncGames = projectRealm.objects("Game");
@@ -77,7 +100,7 @@ const GamesProvider = ({ children }) => {
         setGames([]);
       }
     };  
-  }, []);
+  };
 
   // Render the children within the TaskContext's provider. The value contains
   // everything that should be made available to descendants that use the
@@ -90,6 +113,9 @@ const GamesProvider = ({ children }) => {
         scores,
         findScores,
         addScore,
+        loginUser,
+        loadGames,
+        logoutUser,
       }}
     >
       {children}

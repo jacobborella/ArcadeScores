@@ -1,8 +1,8 @@
 import React from 'react';
+import Welcome from './src/screens/Welcome';
 import ShowScores from './src/screens/ShowScores';
 import SelectGame from './src/screens/SelectGame';
 import AddGame from './src/screens/AddGame';
-import { Game } from './src/components/atoms/Game';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { GamesProvider } from './src/provider/GamesProvider';
@@ -14,6 +14,10 @@ const App = () => {
     <GamesProvider>
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+                name="Welcome"
+                component={Welcome}
+              />
           <Stack.Screen
             name="SelectGame"
             component={SelectGame}
