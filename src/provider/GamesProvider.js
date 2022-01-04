@@ -11,6 +11,8 @@ const GamesProvider = ({ children }) => {
 
   const realmRef = useRef(null);
 
+  const [selectedGame, setSelectedGame] = useState({});
+
   const [games, setGames] = useState([]);
 
   const [scores, setScores] = useState([]);
@@ -108,6 +110,8 @@ const GamesProvider = ({ children }) => {
   return (
     <GamesContext.Provider
       value={{
+        selectedGame,
+        setSelectedGame,
         games,
         createGame,
         scores,

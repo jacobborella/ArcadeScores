@@ -1,12 +1,16 @@
 import React from 'react';
 import { Text, View } from 'react-native';
+import { useGames } from '../../provider/GamesProvider';
 
 const GameView = (props) => {
+  const {setSelectedGame} = useGames();
   return (
     <View>
       <Text style={{color: 'blue', fontSize:30}}//TODO: dynamic font size
-              onPress={() =>
-                props.navigation.navigate('ShowScores', { game: props.data })
+              onPress={() => {
+                setSelectedGame(props.data);
+                props.navigation.navigate('ShowScores')
+              }
               }>{props.data.name + " (" + props.data.variant + ")"}</Text>
       <View
   style={{

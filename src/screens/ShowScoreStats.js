@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
-import { SafeAreaView, Button } from "react-native";
-import ScoresView from "../components/organisms/ScoresView";
-import InputScore from "../components/molecules/InputScore";
+import { SafeAreaView, Button, Text } from "react-native";
 import { useGames } from "../provider/GamesProvider";
 import { LogBox } from 'react-native';
 
@@ -14,10 +12,10 @@ const ShowScores = ({navigation}) => {
   const {scores, findScores, addScore} = useGames();
   useEffect(() => {
       navigation.setOptions({
-        headerTitle: "Scores for " + selectedGame.name,
+        headerTitle: "Score stats for " + selectedGame.name,
         headerLeft: function Header() {
           return <Button title="Back" onPress={() => {
-              navigation.popToTop();
+            navigation.popToTop();
           }
         }/>;
         }
@@ -27,10 +25,7 @@ const ShowScores = ({navigation}) => {
 
   return (
       <SafeAreaView>
-          <InputScore title="Add score" onScoreAdded={(score) => {
-              addScore(game._id, score.level, score.score);
-          }}/>
-          <ScoresView data={scores}/>
+          <Text>TBD</Text>
       </SafeAreaView>
     );
 }
