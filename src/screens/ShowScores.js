@@ -28,7 +28,7 @@ const ShowScores = ({navigation}) => {
   return (
       <SafeAreaView>
           <InputScore title="Add score" onScoreAdded={(score) => {
-              addScore(game._id, score.level, score.score);
+              addScore(selectedGame._id, score.level, score.score);
           }}/>
           <ScoresView data={scores}/>
       </SafeAreaView>
