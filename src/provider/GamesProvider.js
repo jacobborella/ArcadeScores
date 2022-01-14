@@ -28,6 +28,34 @@ const GamesProvider = ({ children }) => {
     });
   }
 
+  const findAvgScore = (gameId, resolution) => {
+    const projectRealm = realmRef.current;
+    dateSplit = new Date();
+    oldDateBorder = new Date();
+    switch(resolution) {
+      case "year":
+        dateSplit.setYear(dateSplit.getYear()-1)
+        oldDateBorder.setYear(oldDateBorder.getYear()-2)
+        break;
+      case "month":
+        dateSplit.setMonth(dateSplit.getMonth()-1)
+        oldDateBorder.setMonth(oldDateBorder.getMonth()-2)
+        break;
+      case "week":
+        dateSplit.setDate(dateSplit.getDate()-7)
+        oldDateBorder.setDate(oldDateBorder.getDate()-14)
+        break;
+      case "day":
+        dateSplit.setDate(dateSplit.getDate()-1)
+        oldDateBorder.setDate(oldDateBorder.getDate()-2)
+        break;
+      }
+      const averageNew = projectRealm.objects("Score").filtered("game_id == $0 && date > $1", gameId, dateSplit).avg("score");
+      const averageOld = projectRealm.objects("Score").filtered("game_id == $0 && date > $1 && date <= $2", gameId, oldDateBorder, dateSplit).avg("score");
+      const growth = averageOld > 0? 100 * (averageNew - averageOld)/averageOld: 0;
+      return {"avg": averageNew | 0, "change": growth | 0};
+    }
+
   const addScore = (gameId, level, score) => {
     const projectRealm = realmRef.current;
     let s;
@@ -120,6 +148,7 @@ const GamesProvider = ({ children }) => {
         loginUser,
         loadGames,
         logoutUser,
+        findAvgScore,
       }}
     >
       {children}
