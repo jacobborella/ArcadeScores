@@ -30,24 +30,27 @@ const GamesProvider = ({ children }) => {
 
   const findAvgScore = (gameId, resolution) => {
     const projectRealm = realmRef.current;
-    dateSplit = new Date();
-    oldDateBorder = new Date();
+    currentTime = new Date();
+    dateSplit = new Date(currentTime.getTime());
+    dateSplit.setHours(0,0,0,0);
+    oldDateBorder = new Date(currentTime.getTime());
+    oldDateBorder.setHours(0,0,0,0);
     switch(resolution) {
       case "year":
-        dateSplit.setYear(dateSplit.getYear()-1)
-        oldDateBorder.setYear(oldDateBorder.getYear()-2)
+        dateSplit = new Date(currentTime.getFullYear(), 0, 1)
+        oldDateBorder = new Date(currentTime.getFullYear() - 1, 0, 1)
         break;
       case "month":
-        dateSplit.setMonth(dateSplit.getMonth()-1)
-        oldDateBorder.setMonth(oldDateBorder.getMonth()-2)
+        dateSplit.setDate(1);
+        oldDateBorder.setDate(1);
+        oldDateBorder.setMonth(dateSplit.getMonth()-1);
         break;
       case "week":
-        dateSplit.setDate(dateSplit.getDate()-7)
-        oldDateBorder.setDate(oldDateBorder.getDate()-14)
+        dateSplit.setDate(dateSplit.getDate()-dateSplit.getDay() + 1)
+        oldDateBorder.setDate(dateSplit.getDate()-7)
         break;
       case "day":
-        dateSplit.setDate(dateSplit.getDate()-1)
-        oldDateBorder.setDate(oldDateBorder.getDate()-2)
+        oldDateBorder.setDate(dateSplit.getDate()-1)
         break;
       }
       const averageNew = projectRealm.objects("Score").filtered("game_id == $0 && date > $1", gameId, dateSplit).avg("score");

@@ -35,7 +35,7 @@ const ShowScores = ({navigation}) => {
   return (
       <SafeAreaView style={[{alignItems:'center'}]}>
           <Text>
-            Your average score the past {currentResolution} is <Text style={styles.scoreText}>{avgScore}</Text>.{"\n"}
+            Your average score this {currentResolution} is <Text style={styles.scoreText}>{avgScore}</Text>.{"\n"}
             That's <Text style={percentageChange >= 0? styles.betterScoreText: styles.worseScoreText}>{Math.abs(percentageChange)}%</Text> {percentageChange >= 0? "better": "worse"} than the previous {currentResolution}.
           </Text>
           <View style={[{flexDirection:'row', alignItems:'center'}]}>
