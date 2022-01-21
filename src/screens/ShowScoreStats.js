@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView, Button, Text, StyleSheet, View } from "react-native";
 import { useGames } from "../provider/GamesProvider";
 import { LogBox } from 'react-native';
+import ScoresView from "../components/organisms/ScoresView";
+
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
@@ -9,9 +11,10 @@ LogBox.ignoreLogs([
 
 const ShowScores = ({navigation}) => {
   const [ avgScore, setAvgScore ] = useState(0)
+  const [ topScores, setTopScores ] = useState([])
   const [ currentResolution, setCurrentResolution ] = useState('week')
   const [ percentageChange, setPercentageChange ] = useState(0)
-  const { selectedGame, findAvgScore } = useGames();
+  const { selectedGame, findAvgScore, findtopScores } = useGames();
   useEffect(() => {
       navigation.setOptions({
         headerTitle: "Score stats for " + selectedGame.name,
@@ -23,6 +26,7 @@ const ShowScores = ({navigation}) => {
         }
       });
       updateAvg(currentResolution);
+      setTopScores(findtopScores(selectedGame._id, 10));
     }, []);
 
   const updateAvg = (resolution) => {
@@ -51,6 +55,8 @@ const ShowScores = ({navigation}) => {
             <Button title="day" onPress={() => {
               updateAvg("day");
             }}/></View>
+          <Text>Top 10 scores</Text>
+          <ScoresView data={topScores}/>
           
       </SafeAreaView>
     );

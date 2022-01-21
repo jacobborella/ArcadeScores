@@ -28,6 +28,17 @@ const GamesProvider = ({ children }) => {
     });
   }
 
+  const findtopScores = (gameId, noOfScores) => {
+    const projectRealm = realmRef.current;
+    const data = projectRealm.objects("Score").filtered("game_id == $0", gameId).sorted("score", true);
+    let returnVal = [];
+    for(let i = 0; i < noOfScores; i++) {
+      if(i >= data.length) break;
+      returnVal.push(data[i]);
+    }
+    return returnVal;
+  }
+
   const findAvgScore = (gameId, resolution) => {
     const projectRealm = realmRef.current;
     currentTime = new Date();
@@ -152,6 +163,7 @@ const GamesProvider = ({ children }) => {
         loadGames,
         logoutUser,
         findAvgScore,
+        findtopScores,
       }}
     >
       {children}
