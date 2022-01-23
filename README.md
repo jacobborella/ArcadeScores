@@ -17,3 +17,11 @@ if compilation problems
 rm package-lock.json
 npm i
 ```
+
+# Known issues
+If you get an error message 'unrecognized font family ionicons'. Resolve with
+```
+npx react-native link react-native-vector-icons
+npm start --reset-cache
+```
+(Taken from https://lifesaver.codes/answer/unrecognized-font-family-ionicons)
