@@ -57,11 +57,13 @@ const GamesProvider = ({ children }) => {
         oldDateBorder.setMonth(dateSplit.getMonth()-1);
         break;
       case "week":
-        dateSplit.setDate(dateSplit.getDate()-dateSplit.getDay() + 1 - 7)
-        oldDateBorder.setDate(dateSplit.getDate()-7)
+        const day = dateSplit.getDay();
+        const diff = dateSplit.getDate() - day + (day == 0 ? -6:1);
+        dateSplit.setDate(diff);
+        oldDateBorder.setTime(dateSplit.getTime()-7*24*3600000)
         break;
       case "day":
-        oldDateBorder.setDate(dateSplit.getDate()-1)
+        oldDateBorder.setTime(dateSplit.getTime()-1*24*3600000)
         break;
       }
       const averageNew = projectRealm.objects("Score").filtered("game_id == $0 && date > $1", gameId, dateSplit).avg("score");
