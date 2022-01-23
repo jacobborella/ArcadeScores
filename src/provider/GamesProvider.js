@@ -57,7 +57,7 @@ const GamesProvider = ({ children }) => {
         oldDateBorder.setMonth(dateSplit.getMonth()-1);
         break;
       case "week":
-        dateSplit.setDate(dateSplit.getDate()-dateSplit.getDay() + 1)
+        dateSplit.setDate(dateSplit.getDate()-dateSplit.getDay() + 1 - 7)
         oldDateBorder.setDate(dateSplit.getDate()-7)
         break;
       case "day":
