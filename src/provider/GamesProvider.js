@@ -117,14 +117,12 @@ const GamesProvider = ({ children }) => {
     };
   }
   async function getRealm() {
-    console.log("inside getRealm")
     if(!app.currentUser) {
        throw new Error("Did you get to this screen without logging in?")
     }
     return new Realm(getConfig(app.currentUser))
   }
   const loadGames = () => {
-    console.log("Load GamesProvider")
     getRealm().then((projectRealm) => {
       realmRef.current = projectRealm;
 
