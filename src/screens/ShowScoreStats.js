@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, Button, Text, StyleSheet, View } from "react-native";
+import { SafeAreaView, Button, Text, StyleSheet, View, Dimensions, Platform, PixelRatio } from "react-native";
 import { useGames } from "../provider/GamesProvider";
 import { LogBox } from 'react-native';
 import ScoresView from "../components/organisms/ScoresView";
@@ -8,6 +8,22 @@ import ScoresView from "../components/organisms/ScoresView";
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
 ]);
+const {
+  width: SCREEN_WIDTH,
+  height: SCREEN_HEIGHT,
+} = Dimensions.get('window');
+
+// based on iphone 5s's scale
+const scale = SCREEN_WIDTH / 320;
+
+export function normalize(size) {
+  const newSize = size * scale 
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize))
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+  }
+}
 
 const ShowScores = ({navigation}) => {
   const [ avgScore, setAvgScore ] = useState(0)
@@ -25,9 +41,12 @@ const ShowScores = ({navigation}) => {
         }/>;
         }
       });
-      updateAvg(currentResolution);
-      setTopScores(findtopScores(selectedGame._id, 10));
-    }, []);
+      const onScreenRefresh = navigation.addListener('focus', () => {
+        updateAvg(currentResolution);
+        setTopScores(findtopScores(selectedGame._id, 10));
+      });
+      return onScreenRefresh;
+    }, [navigation]);
 
   const updateAvg = (resolution) => {
     const {avg, change} = findAvgScore(selectedGame._id, resolution);
@@ -38,8 +57,8 @@ const ShowScores = ({navigation}) => {
 
   return (
       <SafeAreaView style={[{alignItems:'center'}]}>
-          <Text>
-            Your average score this {currentResolution} is <Text style={styles.scoreText}>{avgScore}</Text>.{"\n"}
+          <Text style={{fontSize: normalize(18)}}>
+            Your average score this {currentResolution} is <Text style={styles.scoreText}>{avgScore}</Text>. 
             That's <Text style={percentageChange >= 0? styles.betterScoreText: styles.worseScoreText}>{Math.abs(percentageChange)}%</Text> {percentageChange >= 0? "better": "worse"} than the previous {currentResolution}.
           </Text>
           <View style={[{flexDirection:'row', alignItems:'center'}]}>
